@@ -7,10 +7,7 @@ import '../cubit/product_state.dart';
 class ProductDetailsPage extends StatefulWidget {
   final String productId;
 
-  const ProductDetailsPage({
-    super.key,
-    required this.productId,
-  });
+  const ProductDetailsPage({super.key, required this.productId});
 
   @override
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
@@ -21,17 +18,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   void initState() {
     super.initState();
 
-    context.read<ProductCubit>().fetchProductDetails(
-      widget.productId,
-    );
+    context.read<ProductCubit>().fetchProductDetails(widget.productId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Product Details'),
-      ),
+      appBar: AppBar(title: const Text('Product Details')),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
           return state.when(
@@ -40,9 +33,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             },
 
             loading: () {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             },
 
             productsSuccess: (_) {
@@ -64,10 +55,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         return const SizedBox(
                           height: 250,
                           child: Center(
-                            child: Icon(
-                              Icons.image_not_supported,
-                              size: 60,
-                            ),
+                            child: Icon(Icons.image_not_supported, size: 60),
                           ),
                         );
                       },
@@ -77,6 +65,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
                     Text(
                       product.name,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -87,9 +76,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
                     Text(
                       product.arabicName,
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 18),
                     ),
 
                     const SizedBox(height: 15),
@@ -106,54 +94,42 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
                     Text(
                       product.description,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
+                      style: const TextStyle(fontSize: 16),
                     ),
 
                     const SizedBox(height: 10),
 
                     Text(
                       product.arabicDescription,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
+                      style: const TextStyle(fontSize: 16),
                     ),
 
                     const SizedBox(height: 20),
 
                     Text(
                       'Rating: ${product.rating}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
+                      style: const TextStyle(fontSize: 16),
                     ),
 
                     const SizedBox(height: 10),
 
                     Text(
                       'Reviews: ${product.reviewsCount}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
+                      style: const TextStyle(fontSize: 16),
                     ),
 
                     const SizedBox(height: 10),
 
                     Text(
                       'Stock: ${product.stock}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
+                      style: const TextStyle(fontSize: 16),
                     ),
 
                     const SizedBox(height: 10),
 
                     Text(
                       'Color: ${product.color}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ],
                 ),
@@ -164,10 +140,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(20),
-                  child: Text(
-                    message,
-                    textAlign: TextAlign.center,
-                  ),
+                  child: Text(message, textAlign: TextAlign.center),
                 ),
               );
             },

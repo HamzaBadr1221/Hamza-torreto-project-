@@ -23,7 +23,7 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Products')),
+      appBar: AppBar(title: const Text('Products'), centerTitle: true),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
           return state.when(
@@ -45,24 +45,32 @@ class _ProductsPageState extends State<ProductsPage> {
                 itemBuilder: (context, index) {
                   final product = products.items[index];
 
-                  return ListTile(
-                    leading: Image.network(
-                      product.coverPictureUrl,
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.image_not_supported);
-                      },
-                    ),
+                  return Column(
+                    children: [
+                       SizedBox(height: 16),
+                      ListTile(
+                        leading: Image.network(
+                          product.coverPictureUrl,
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(Icons.image_not_supported);
+                          },
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        tileColor: Colors.grey.shade500,
+                        title: Text(product.name),
+                        subtitle: Text('${product.price} EGP'),
+                        textColor: Colors.black,
 
-                    title: Text(product.name),
-
-                    subtitle: Text('${product.price} EGP'),
-
-                    onTap: () {
-                      context.push('/product-details/${product.id}');
-                    },
+                        onTap: () {
+                          context.push('/product-details/${product.id}');
+                        },
+                      ),
+                    ],
                   );
                 },
               );
