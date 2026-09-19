@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
 import '../cubit/auth_cubit.dart';
 import '../cubit/auth_state.dart';
 import '../../data/models/login_request.dart';
@@ -60,15 +59,25 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Login')),
+        appBar: AppBar(title: const Text('Login'),centerTitle: true,),
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             children: [
-              TextField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(labelText: 'Email'),
+              Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade100,
+                  shape: BoxShape.circle, // or BoxShape.rectangle
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 6,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Icon(Icons.person, color: Colors.black, size: 100),
               ),
 
               const SizedBox(height: 15),
