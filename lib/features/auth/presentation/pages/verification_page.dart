@@ -79,6 +79,11 @@ class _VerificationPageState extends State<VerificationPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Verification'),
+          centerTitle: true,
+          leading: IconButton(
+            onPressed: () =>  context.go('/sign-up'),
+            icon: const Icon(Icons.arrow_back),
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(24),

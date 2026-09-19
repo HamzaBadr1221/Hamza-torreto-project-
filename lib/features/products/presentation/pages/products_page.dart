@@ -23,9 +23,7 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Products'),
-      ),
+      appBar: AppBar(title: const Text('Products')),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
           return state.when(
@@ -34,16 +32,12 @@ class _ProductsPageState extends State<ProductsPage> {
             },
 
             loading: () {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             },
 
             productsSuccess: (products) {
               if (products.items.isEmpty) {
-                return const Center(
-                  child: Text('No products found'),
-                );
+                return const Center(child: Text('No products found'));
               }
 
               return ListView.builder(
@@ -64,14 +58,10 @@ class _ProductsPageState extends State<ProductsPage> {
 
                     title: Text(product.name),
 
-                    subtitle: Text(
-                      '${product.price} EGP',
-                    ),
+                    subtitle: Text('${product.price} EGP'),
 
                     onTap: () {
-                      context.push(
-                        '/product-details/${product.id}',
-                      );
+                      context.push('/product-details/${product.id}');
                     },
                   );
                 },
@@ -86,10 +76,7 @@ class _ProductsPageState extends State<ProductsPage> {
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(20),
-                  child: Text(
-                    message,
-                    textAlign: TextAlign.center,
-                  ),
+                  child: Text(message, textAlign: TextAlign.center),
                 ),
               );
             },
