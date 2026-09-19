@@ -1,9 +1,10 @@
-import 'package:eshop_project/validations.dart';
+// import 'package:eshop_project/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app_assets.dart';
+import '../../../../validations.dart' show EmailValidator, PasswordValidator;
 import '../../widget/custom_widget.dart';
 import '../cubit/auth_cubit.dart';
 import '../cubit/auth_state.dart';
@@ -25,6 +26,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void dispose() {
+
     emailController.dispose();
     passwordController.dispose();
     firstNameController.dispose();
@@ -33,20 +35,14 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void register() {
+    if (!(formKey.currentState?.validate() ?? false)) {
+      return; // stops here if any field's validator returns an error message
+    }
+
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
     final firstName = firstNameController.text.trim();
     final lastName = lastNameController.text.trim();
-
-    if (email.isEmpty ||
-        password.isEmpty ||
-        firstName.isEmpty ||
-        lastName.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please fill all fields')));
-      return;
-    }
 
     context.read<AuthCubit>().registerUser(
       RegisterRequest(
@@ -230,7 +226,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                               onPressed: () {
                                 context.go('/login');
-                              }, child: Text("Login"),
+                              },
+                              child: Text("Login"),
                             ),
                           ),
                         ],
