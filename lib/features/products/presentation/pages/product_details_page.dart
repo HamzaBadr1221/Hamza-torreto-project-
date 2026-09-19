@@ -44,7 +44,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image.network(
                       product.coverPictureUrl,
@@ -72,63 +72,65 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       ),
                     ),
 
-                    const SizedBox(height: 10),
-
-                    Text(
-                      product.arabicName,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-
-                    const SizedBox(height: 15),
-
-                    Text(
-                      '${product.price} EGP',
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 15),
-
+                    const SizedBox(height: 16),
                     Text(
                       product.description,
                       style: const TextStyle(fontSize: 16),
                     ),
-
-                    const SizedBox(height: 10),
-
+                    const SizedBox(height: 16),
                     Text(
-                      product.arabicDescription,
+                      product.arabicName,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 16),
                     ),
 
+                    const SizedBox(height: 16),
+                    Text(
+                      product.arabicDescription,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.rtl,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '${product.price} EGP',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 20),
 
                     Text(
                       'Rating: ${product.rating}',
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 24),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.star_rate, color: Colors.yellow.shade700),
+                        Icon(Icons.star_rate, color: Colors.yellow.shade700),
+                        Icon(Icons.star_rate, color: Colors.yellow.shade700),
+                        Icon(Icons.star_rate, color: Colors.yellow.shade700),
+                        Icon(Icons.star_rate, color: Colors.yellow.shade700),
+                      ],
                     ),
 
                     const SizedBox(height: 10),
-
-                    Text(
-                      'Reviews: ${product.reviewsCount}',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    Text(
-                      'Stock: ${product.stock}',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-
-                    const SizedBox(height: 10),
-
                     Text(
                       'Color: ${product.color}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    Icon(Icons.square, color: Colors.red.shade600),
+
+                    const SizedBox(height: 10),
+                    Text(
+                      'Stock: ${product.stock}',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ],
