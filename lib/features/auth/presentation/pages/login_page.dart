@@ -30,18 +30,13 @@ class _LoginPageState extends State<LoginPage> {
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter email and password'),
-        ),
+        const SnackBar(content: Text('Please enter email and password')),
       );
       return;
     }
 
     context.read<AuthCubit>().loginUser(
-      LoginRequest(
-        email: email,
-        password: password,
-      ),
+      LoginRequest(email: email, password: password),
     );
   }
 
@@ -59,18 +54,13 @@ class _LoginPageState extends State<LoginPage> {
           verifyEmailSuccess: () {},
           resendOtpSuccess: () {},
           error: (message) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-              ),
-            );
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(message)));
           },
         );
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
-        ),
+        appBar: AppBar(title: const Text('Login')),
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -78,9 +68,7 @@ class _LoginPageState extends State<LoginPage> {
               TextField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                ),
+                decoration: const InputDecoration(labelText: 'Email'),
               ),
 
               const SizedBox(height: 15),
@@ -88,9 +76,7 @@ class _LoginPageState extends State<LoginPage> {
               TextField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                ),
+                decoration: const InputDecoration(labelText: 'Password'),
               ),
 
               const SizedBox(height: 30),
