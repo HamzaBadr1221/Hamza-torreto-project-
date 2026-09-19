@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../validations.dart';
+import '../../widget/custom_widget.dart';
 import '../cubit/auth_cubit.dart';
 import '../cubit/auth_state.dart';
 import '../../data/models/login_request.dart';
@@ -15,6 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -24,19 +28,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() {
-    final email = emailController.text.trim();
-    final password = passwordController.text.trim();
+    if (formKey.currentState?.validate() ?? false) {
+      final email = emailController.text.trim();
+      final password = passwordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter email and password')),
+      context.read<AuthCubit>().loginUser(
+        LoginRequest(email: email, password: password),
       );
-      return;
     }
-
-    context.read<AuthCubit>().loginUser(
-      LoginRequest(email: email, password: password),
-    );
   }
 
   @override
@@ -59,66 +58,94 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Login'),centerTitle: true,),
-        body: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade100,
-                  shape: BoxShape.circle, // or BoxShape.rectangle
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 6,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
+        appBar: AppBar(
+          title: Text('Login'),
+          centerTitle: true,
+          titleTextStyle: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 30,
+            color: Colors.black,
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade100,
+                    shape: BoxShape.circle,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    color: Colors.black,
+                    size: 100,
+                  ),
+                ), // Icon in shape of person
+                const SizedBox(height: 32),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      CustomTextFieldWidget(
+                        controller: emailController,
+                        hintText: 'Enter Mail',
+                        validator: EmailValidator().validate,
+                      ),
+                      const SizedBox(height: 16),
+                      CustomTextFieldWidget(
+                        controller: passwordController,
+                        hintText: 'Enter Password',
+                        validator: PasswordValidator().validate,
+                      ),
+                    ],
+                  ),
+                ), // Form that contain email and password input from user
+                const SizedBox(height: 32),
+
+                BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, state) {
+                    final isLoading = state.maybeWhen(
+                      loading: () => true,
+                      orElse: () => false,
+                    );
+
+                    return SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: isLoading ? null : login,
+                        child: isLoading
+                            ? const CircularProgressIndicator()
+                            : const Text('Login')
+                      ),
+                    );
+                  },
                 ),
-                child: Icon(Icons.person, color: Colors.black, size: 100),
-              ),
 
-              const SizedBox(height: 15),
+                const SizedBox(height: 15),
 
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'Password'),
-              ),
-
-              const SizedBox(height: 30),
-
-              BlocBuilder<AuthCubit, AuthState>(
-                builder: (context, state) {
-                  final isLoading = state.maybeWhen(
-                    loading: () => true,
-                    orElse: () => false,
-                  );
-
-                  return SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: isLoading ? null : login,
-                      child: isLoading
-                          ? const CircularProgressIndicator()
-                          : const Text('Login'),
-                    ),
-                  );
-                },
-              ),
-
-              const SizedBox(height: 15),
-
-              TextButton(
-                onPressed: () {
-                  context.go('/sign-up');
-                },
-                child: const Text('Create an account'),
-              ),
-            ],
+                TextButton(
+                  onPressed: () {
+                    context.go('/sign-up');
+                  },
+                  child: const Text('Create an account'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
