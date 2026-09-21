@@ -23,7 +23,19 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Products'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('Products'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.go("/settings");
+            },
+            icon: Icon(Icons.settings),
+          ),
+        ],
+      ),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
           return state.when(
@@ -47,7 +59,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
                   return Column(
                     children: [
-                       SizedBox(height: 16),
+                      SizedBox(height: 16),
                       ListTile(
                         leading: Image.network(
                           product.coverPictureUrl,

@@ -5,15 +5,13 @@ import '../../features/auth/presentation/pages/sign_up_page.dart';
 import '../../features/auth/presentation/pages/verification_page.dart';
 import '../../features/products/presentation/pages/products_page.dart';
 import '../../features/products/presentation/pages/product_details_page.dart';
+import '../../features/products/presentation/pages/settings.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/login',
     routes: [
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginPage(),
-      ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
 
       GoRoute(
         path: '/sign-up',
@@ -25,9 +23,7 @@ class AppRouter {
         builder: (context, state) {
           final email = state.extra as String;
 
-          return VerificationPage(
-            email: email,
-          );
+          return VerificationPage(email: email);
         },
       ),
 
@@ -41,11 +37,10 @@ class AppRouter {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
 
-          return ProductDetailsPage(
-            productId: id,
-          );
+          return ProductDetailsPage(productId: id);
         },
       ),
+      GoRoute(path: "/settings", builder: (context, state) => settings()),
     ],
   );
 }

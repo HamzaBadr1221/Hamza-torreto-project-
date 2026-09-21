@@ -1,10 +1,11 @@
-import 'package:eshop_project/core/cubit/theme/theme_cubit.dart';
+import 'package:eshop_project/core/cubit/theme/theme_cubic.dart';
 import 'package:eshop_project/core/cubit/theme/theme_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/di/injection_container.dart';
 import 'core/router/app_router.dart';
+import 'core/utils/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
+            theme: state.isDark
+                ? AppTheme().darkTheme()
+                : AppTheme().lightTheme(),
             routerConfig: AppRouter.router,
           );
         },
