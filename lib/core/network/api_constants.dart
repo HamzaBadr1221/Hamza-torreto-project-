@@ -6,8 +6,8 @@ class ApiConstants {
   static const String register = '/api/auth/register';
   static const String verifyEmail = '/api/auth/verify-email';
   static const String resendOtp = '/api/auth/resend-otp';
-
   static const String products = '/api/products';
+  static const String categories = '/api/categories';
 
   static String productDetails(String id) {
     return '/api/products/$id';

@@ -1,13 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
+
 import '../../data/models/login_request.dart';
 import '../../data/models/register_request.dart';
 import '../../data/models/resend_otp_request.dart';
 import '../../data/models/verify_email_request.dart';
+
 import '../../domain/usecases/login.dart';
 import '../../domain/usecases/register.dart';
 import '../../domain/usecases/resend_otp.dart';
 import '../../domain/usecases/verify_email.dart';
+
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -23,16 +26,27 @@ class AuthCubit extends Cubit<AuthState> {
     required this.resendOtp,
   }) : super(const AuthState.initial());
 
+  // ================= LOGIN =================
+
   Future<void> loginUser(LoginRequest request) async {
     emit(const AuthState.loading());
 
     try {
-      await login(request);
+      final response = await login(request);
+
+      print('========== LOGIN SUCCESS ==========');
+      print('ACCESS TOKEN: ${response.accessToken}');
+      print('===================================');
+
       emit(const AuthState.loginSuccess());
     } catch (e) {
+      print('LOGIN ERROR: $e');
+
       emit(AuthState.error(e.toString()));
     }
   }
+
+  // ================= REGISTER =================
 
   Future<void> registerUser(RegisterRequest request) async {
     emit(const AuthState.loading());
@@ -65,22 +79,32 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> verifyUserEmail(VerifyEmailRequest request) async {
+  // ================= VERIFY EMAIL =================
+
+  Future<void> verifyUserEmail(
+      VerifyEmailRequest request,
+      ) async {
     emit(const AuthState.loading());
 
     try {
       await verifyEmail(request);
+
       emit(const AuthState.verifyEmailSuccess());
     } catch (e) {
       emit(AuthState.error(e.toString()));
     }
   }
 
-  Future<void> resendUserOtp(ResendOtpRequest request) async {
+  // ================= RESEND OTP =================
+
+  Future<void> resendUserOtp(
+      ResendOtpRequest request,
+      ) async {
     emit(const AuthState.loading());
 
     try {
       await resendOtp(request);
+
       emit(const AuthState.resendOtpSuccess());
     } catch (e) {
       emit(AuthState.error(e.toString()));

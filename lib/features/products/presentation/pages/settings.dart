@@ -78,7 +78,22 @@ class _settingsState extends State<settings> {
                   },
                 ),
               ],
-            ), // Dark/Light Mode
+            ),
+            // Dark/Light Mode
+            const Spacer(),
+            Padding(
+            padding:const EdgeInsets.all(20),
+              child:SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () {
+                      context.go('/login');
+                    },
+                  child: const Text('Log out'),
+                ),
+              ),
+            ),
           ],
         ),
       ),

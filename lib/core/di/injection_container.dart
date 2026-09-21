@@ -17,6 +17,11 @@ import '../../features/products/domain/usecases/get_product_details.dart';
 import '../../features/products/domain/usecases/get_product.dart';
 import '../../features/products/presentation/cubit/product_cubit.dart';
 
+import '../../features/categories/data/datasources/category_remote_data_source.dart';
+import '../../features/categories/data/repositories/category_repositoy_impl.dart';
+import '../../features/categories/domain/repositories/category_repository.dart';
+import '../../features/categories/domain/usecases/get_categories.dart';
+import '../../features/categories/presentation/cubit/categories_cubit.dart';
 class InjectionContainer {
   static late Dio dio;
 
@@ -34,6 +39,11 @@ class InjectionContainer {
   static late GetProducts getProducts;
   static late GetProductDetails getProductDetails;
 
+  static late CategoryRemoteDataSource categoryRemoteDataSource;
+  static late CategoryRepository categoryRepository;
+  static late GetCategories getCategories;
+
+
   static Future<void> init() async {
 
     dio = DioFactory.create();
@@ -50,7 +60,7 @@ class InjectionContainer {
     verifyEmail = VerifyEmail(authRepository);
     resendOtp = ResendOtp(authRepository);
 
-    // Products
+
     productRemoteDataSource = ProductRemoteDataSource(dio);
 
     productRepository = ProductRepositoryImpl(
@@ -59,6 +69,12 @@ class InjectionContainer {
 
     getProducts = GetProducts(productRepository);
     getProductDetails = GetProductDetails(productRepository);
+
+    categoryRemoteDataSource = CategoryRemoteDataSource(dio);
+    categoryRepository = CategoryRepositoryImpl(
+      categoryRemoteDataSource,
+    );
+    getCategories = GetCategories(categoryRepository);
   }
 
   static AuthCubit createAuthCubit() {
@@ -74,6 +90,12 @@ class InjectionContainer {
     return ProductCubit(
       getProducts: getProducts,
       getProductDetails: getProductDetails,
+    );
+  }
+
+  static CategoryCubit createCategoryCubit(){
+    return CategoryCubit(
+       getCategories,
     );
   }
 }
