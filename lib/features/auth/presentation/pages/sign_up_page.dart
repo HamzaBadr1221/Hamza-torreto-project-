@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../app_assets.dart';
+import '../../../../core/utils/app_assets.dart';
 import '../../../../validations.dart' show EmailValidator, PasswordValidator;
 import '../../widget/custom_widget.dart';
 import '../cubit/auth_cubit.dart';
