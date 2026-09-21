@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/app_assets.dart';
 import '../../../../validations.dart' show EmailValidator, PasswordValidator;
-import '../../widget/custom_widget.dart';
+import '../../presentation/widget/custom_widget.dart';
 import '../cubit/auth_cubit.dart';
 import '../cubit/auth_state.dart';
 import '../../data/models/register_request.dart';

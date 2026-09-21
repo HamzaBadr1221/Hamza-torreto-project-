@@ -35,10 +35,10 @@ class InjectionContainer {
   static late GetProductDetails getProductDetails;
 
   static Future<void> init() async {
-    // Dio
+
     dio = DioFactory.create();
 
-    // Auth
+
     authRemoteDataSource = AuthRemoteDataSource(dio);
 
     authRepository = AuthRepositoryImpl(
