@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api_constants.dart';
 
 class DioFactory {
-  static Dio create() {
+  static Dio create(
+      SharedPreferences sharedPreferences,
+      ) {
     final dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.baseUrl,
@@ -12,6 +15,22 @@ class DioFactory {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+        },
+      ),
+    );
+
+    // ================= TOKEN INTERCEPTOR =================
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          final token = sharedPreferences.getString('accessToken');
+
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+
+          return handler.next(options);
         },
       ),
     );

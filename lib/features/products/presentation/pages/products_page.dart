@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
 import '../cubit/product_cubit.dart';
 import '../cubit/product_state.dart';
 import '../../../categories/presentation/cubit/categories_cubit.dart';
 import '../../../categories/presentation/cubit/category_state.dart';
+
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
+
   @override
   State<ProductsPage> createState() => _ProductsPageState();
 }
+
 class _ProductsPageState extends State<ProductsPage> {
   @override
   void initState() {
     super.initState();
+
     context.read<ProductCubit>().fetchProducts();
-    const String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNmZkMTc3Yy04ZmI2LTRiYjMtYTE0Yy0wOGRmMTczZjk2ZWIiLCJqdGkiOiJjNDFlYzhmNC0yYTAzLTQyZmMtOGU2OC1iZmJlNmIzMDE2Y2UiLCJlbWFpbCI6InRlc3R0YXNrMTg2QGdtYWlsLmNvbSIsIm5hbWUiOiJIYW16YSBCYWRyIiwicm9sZXMiOiIiLCJwaWN0dXJlIjoiIiwiZXhwIjoxNzkwMjEyNzYxLCJpc3MiOiJlc2hvcC5uZXQiLCJhdWQiOiJlc2hvcC5uZXQifQ.usKB3oO63P5pe9WokIivTJj3QtewOmBaTBnHPHMXdVM';
+
+    const String token =
+        '';
+
     context.read<CategoryCubit>().fetchCategories(token);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +34,14 @@ class _ProductsPageState extends State<ProductsPage> {
         title: const Text('Products'),
         centerTitle: true,
         automaticallyImplyLeading: false,
+
+        leading: IconButton(
+          onPressed: () {
+            context.go('/cart');
+          },
+          icon: const Icon(Icons.shopping_cart),
+        ),
+
         actions: [
           IconButton(
             onPressed: () {
@@ -34,6 +51,7 @@ class _ProductsPageState extends State<ProductsPage> {
           ),
         ],
       ),
+
       body: Column(
         children: [
           BlocBuilder<CategoryCubit, CategoryState>(
@@ -42,6 +60,7 @@ class _ProductsPageState extends State<ProductsPage> {
                 initial: () {
                   return const SizedBox();
                 },
+
                 loading: () {
                   return const SizedBox(
                     height: 60,
@@ -50,6 +69,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     ),
                   );
                 },
+
                 success: (categories) {
                   if (categories.categories.isEmpty) {
                     return const SizedBox();
@@ -65,7 +85,8 @@ class _ProductsPageState extends State<ProductsPage> {
                       ),
                       itemCount: categories.categories.length,
                       itemBuilder: (context, index) {
-                        final category = categories.categories[index];
+                        final category =
+                        categories.categories[index];
 
                         return Container(
                           width: 100,
@@ -73,13 +94,15 @@ class _ProductsPageState extends State<ProductsPage> {
                           child: Column(
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius:
+                                BorderRadius.circular(50),
                                 child: Image.network(
                                   category.coverPictureUrl,
                                   width: 70,
                                   height: 70,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
+                                  errorBuilder:
+                                      (context, error, stackTrace) {
                                     return Container(
                                       width: 70,
                                       height: 70,
@@ -113,12 +136,14 @@ class _ProductsPageState extends State<ProductsPage> {
                     ),
                   );
                 },
+
                 error: (message) {
                   return const SizedBox();
                 },
               );
             },
           ),
+
           Expanded(
             child: BlocBuilder<ProductCubit, ProductState>(
               builder: (context, state) {
@@ -126,24 +151,29 @@ class _ProductsPageState extends State<ProductsPage> {
                   initial: () {
                     return const SizedBox();
                   },
+
                   loading: () {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   },
+
                   productsSuccess: (products) {
                     if (products.items.isEmpty) {
                       return const Center(
                         child: Text('No products found'),
                       );
                     }
+
                     return ListView.builder(
                       itemCount: products.items.length,
                       itemBuilder: (context, index) {
                         final product = products.items[index];
+
                         return Column(
                           children: [
                             const SizedBox(height: 16),
+
                             ListTile(
                               leading: Image.network(
                                 product.coverPictureUrl,
@@ -157,16 +187,22 @@ class _ProductsPageState extends State<ProductsPage> {
                                   );
                                 },
                               ),
+
                               shape: RoundedRectangleBorder(
                                 borderRadius:
                                 BorderRadius.circular(32),
                               ),
+
                               tileColor: Colors.grey.shade500,
+
                               title: Text(product.name),
+
                               subtitle: Text(
                                 '${product.price} EGP',
                               ),
+
                               textColor: Colors.black,
+
                               onTap: () {
                                 context.push(
                                   '/product-details/${product.id}',
@@ -178,9 +214,11 @@ class _ProductsPageState extends State<ProductsPage> {
                       },
                     );
                   },
+
                   productDetailsSuccess: (_) {
                     return const SizedBox();
                   },
+
                   error: (message) {
                     return Center(
                       child: Padding(

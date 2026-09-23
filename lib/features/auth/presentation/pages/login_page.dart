@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.black,
                     size: 100,
                   ),
-                ), // Icon in shape of person
+                ),
                 const SizedBox(height: 32),
                 Form(
                   key: formKey,
@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-                ), // Form that contain email and password input from user
+                ),
                 const SizedBox(height: 32),
 
                 BlocBuilder<AuthCubit, AuthState>(

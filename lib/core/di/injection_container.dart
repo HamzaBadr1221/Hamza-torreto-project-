@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../network/dio_factory.dart';
 
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
@@ -22,8 +24,22 @@ import '../../features/categories/data/repositories/category_repositoy_impl.dart
 import '../../features/categories/domain/repositories/category_repository.dart';
 import '../../features/categories/domain/usecases/get_categories.dart';
 import '../../features/categories/presentation/cubit/categories_cubit.dart';
+
+// ================= CART IMPORTS =================
+
+import '../../features/cart/data/datasources/cart_remote_data_source.dart';
+import '../../features/cart/data/repositories/cart_repository_impl.dart';
+import '../../features/cart/domain/repositories/cart_repository.dart';
+import '../../features/cart/domain/usecases/add_to_cart.dart';
+import '../../features/cart/domain/usecases/get_cart.dart';
+import '../../features/cart/presentation/cubit/cart_cubit.dart';
+
 class InjectionContainer {
   static late Dio dio;
+
+  static late SharedPreferences sharedPreferences;
+
+  // ================= AUTH =================
 
   static late AuthRemoteDataSource authRemoteDataSource;
   static late AuthRepository authRepository;
@@ -33,21 +49,38 @@ class InjectionContainer {
   static late VerifyEmail verifyEmail;
   static late ResendOtp resendOtp;
 
+  // ================= PRODUCTS =================
+
   static late ProductRemoteDataSource productRemoteDataSource;
   static late ProductRepository productRepository;
 
   static late GetProducts getProducts;
   static late GetProductDetails getProductDetails;
 
+  // ================= CATEGORIES =================
+
   static late CategoryRemoteDataSource categoryRemoteDataSource;
   static late CategoryRepository categoryRepository;
   static late GetCategories getCategories;
 
+  // ================= CART =================
+
+  static late CartRemoteDataSource cartRemoteDataSource;
+  static late CartRepository cartRepository;
+
+  static late GetCart getCart;
+  static late AddToCart addToCart;
 
   static Future<void> init() async {
+    // ================= SHARED PREFERENCES =================
 
-    dio = DioFactory.create();
+    sharedPreferences = await SharedPreferences.getInstance();
 
+    // ================= DIO =================
+
+    dio = DioFactory.create(sharedPreferences);
+
+    // ================= AUTH =================
 
     authRemoteDataSource = AuthRemoteDataSource(dio);
 
@@ -60,6 +93,7 @@ class InjectionContainer {
     verifyEmail = VerifyEmail(authRepository);
     resendOtp = ResendOtp(authRepository);
 
+    // ================= PRODUCTS =================
 
     productRemoteDataSource = ProductRemoteDataSource(dio);
 
@@ -70,12 +104,29 @@ class InjectionContainer {
     getProducts = GetProducts(productRepository);
     getProductDetails = GetProductDetails(productRepository);
 
+    // ================= CATEGORIES =================
+
     categoryRemoteDataSource = CategoryRemoteDataSource(dio);
+
     categoryRepository = CategoryRepositoryImpl(
       categoryRemoteDataSource,
     );
+
     getCategories = GetCategories(categoryRepository);
+
+    // ================= CART =================
+
+    cartRemoteDataSource = CartRemoteDataSource(dio);
+
+    cartRepository = CartRepositoryImpl(
+      cartRemoteDataSource,
+    );
+
+    getCart = GetCart(cartRepository);
+    addToCart = AddToCart(cartRepository);
   }
+
+  // ================= AUTH CUBIT =================
 
   static AuthCubit createAuthCubit() {
     return AuthCubit(
@@ -83,8 +134,11 @@ class InjectionContainer {
       register: register,
       verifyEmail: verifyEmail,
       resendOtp: resendOtp,
+      sharedPreferences: sharedPreferences,
     );
   }
+
+  // ================= PRODUCT CUBIT =================
 
   static ProductCubit createProductCubit() {
     return ProductCubit(
@@ -93,9 +147,20 @@ class InjectionContainer {
     );
   }
 
-  static CategoryCubit createCategoryCubit(){
+  // ================= CATEGORY CUBIT =================
+
+  static CategoryCubit createCategoryCubit() {
     return CategoryCubit(
-       getCategories,
+      getCategories,
+    );
+  }
+
+  // ================= CART CUBIT =================
+
+  static CartCubit createCartCubit() {
+    return CartCubit(
+      getCart: getCart,
+      addToCart: addToCart,
     );
   }
 }

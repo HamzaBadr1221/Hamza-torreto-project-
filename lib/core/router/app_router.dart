@@ -1,17 +1,27 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../core/di/injection_container.dart';
 
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/sign_up_page.dart';
 import '../../features/auth/presentation/pages/verification_page.dart';
+
 import '../../features/products/presentation/pages/products_page.dart';
 import '../../features/products/presentation/pages/product_details_page.dart';
 import '../../features/products/presentation/pages/settings.dart';
 
+import '../../features/cart/presentation/pages/cart_screen.dart';
+
 class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/login',
+
     routes: [
-      GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginPage(),
+      ),
 
       GoRoute(
         path: '/sign-up',
@@ -33,14 +43,30 @@ class AppRouter {
       ),
 
       GoRoute(
+        path: '/cart',
+        builder: (context, state) => const CartScreen(),
+      ),
+
+      GoRoute(
         path: '/product-details/:id',
         builder: (context, state) {
           final id = state.pathParameters['id']!;
 
-          return ProductDetailsPage(productId: id);
+          return BlocProvider(
+            create: (context) =>
+                InjectionContainer.createCartCubit(),
+
+            child: ProductDetailsPage(
+              productId: id,
+            ),
+          );
         },
       ),
-      GoRoute(path: "/settings", builder: (context, state) => settings()),
+
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => settings(),
+      ),
     ],
   );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/models/login_request.dart';
 import '../../data/models/register_request.dart';
@@ -18,12 +19,14 @@ class AuthCubit extends Cubit<AuthState> {
   final Register register;
   final VerifyEmail verifyEmail;
   final ResendOtp resendOtp;
+  final SharedPreferences sharedPreferences;
 
   AuthCubit({
     required this.login,
     required this.register,
     required this.verifyEmail,
     required this.resendOtp,
+    required this.sharedPreferences,
   }) : super(const AuthState.initial());
 
   // ================= LOGIN =================
@@ -34,8 +37,14 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final response = await login(request);
 
+      // Save Access Token
+      await sharedPreferences.setString(
+        'accessToken',
+        response.accessToken,
+      );
+
       print('========== LOGIN SUCCESS ==========');
-      print('ACCESS TOKEN: ${response.accessToken}');
+      print('TOKEN SAVED SUCCESSFULLY');
       print('===================================');
 
       emit(const AuthState.loginSuccess());
