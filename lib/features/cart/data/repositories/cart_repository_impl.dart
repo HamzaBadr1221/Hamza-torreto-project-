@@ -19,4 +19,11 @@ class CartRepositoryImpl implements CartRepository {
       ) async {
     return await remoteDataSource.addToCart(request);
   }
+
+  @override
+  Future<void> deleteCartItem(
+      String itemId,
+      ) async {
+    return await remoteDataSource.deleteCartItem(itemId);
+  }
 }

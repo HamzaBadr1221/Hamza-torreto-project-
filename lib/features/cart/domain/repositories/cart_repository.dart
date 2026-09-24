@@ -7,4 +7,8 @@ abstract class CartRepository {
   Future<void> addToCart(
       AddToCartRequest request,
       );
+
+  Future<void> deleteCartItem(
+      String itemId,
+      );
 }

@@ -2,22 +2,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/add_to_cart_request.dart';
 import '../../domain/usecases/add_to_cart.dart';
+import '../../domain/usecases/delete_cart_item.dart';
 import '../../domain/usecases/get_cart.dart';
 import 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
   final GetCart getCart;
   final AddToCart addToCart;
+  final DeleteCartItem deleteCartItem;
 
   CartCubit({
     required this.getCart,
     required this.addToCart,
-  }) : super(const CartState.initial());
+    required this.deleteCartItem,
+  }) : super(
+    const CartState.initial(),
+  );
 
-  // ================= GET CART =================
 
   Future<void> fetchCart() async {
-    emit(const CartState.loading());
+    emit(
+      const CartState.loading(),
+    );
 
     try {
       final cart = await getCart();
@@ -27,12 +33,13 @@ class CartCubit extends Cubit<CartState> {
       );
     } catch (e) {
       emit(
-        CartState.error(e.toString()),
+        CartState.error(
+          e.toString(),
+        ),
       );
     }
   }
 
-  // ================= ADD TO CART =================
 
   Future<void> addProductToCart({
     required String productId,
@@ -46,13 +53,42 @@ class CartCubit extends Cubit<CartState> {
         ),
       );
 
-      emit(const CartState.addedToCart());
+      emit(
+        const CartState.addedToCart(),
+      );
 
-      // Refresh cart after adding
       await fetchCart();
     } catch (e) {
       emit(
-        CartState.error(e.toString()),
+        CartState.error(
+          e.toString(),
+        ),
+      );
+    }
+  }
+
+
+
+  Future<void> deleteProductFromCart({
+    required String itemId,
+  }) async {
+    try {
+      emit(
+        const CartState.loading(),
+      );
+
+      await deleteCartItem(itemId);
+
+      emit(
+        const CartState.deletedFromCart(),
+      );
+
+      await fetchCart();
+    } catch (e) {
+      emit(
+        CartState.error(
+          e.toString(),
+        ),
       );
     }
   }

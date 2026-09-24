@@ -72,7 +72,6 @@ class ProductRemoteDataSource {
       print('URL: ${response.requestOptions.uri}');
       print('=====================================');
 
-      // Details API بيرجع أسماء مختلفة للـ Arabic fields
       final data = Map<String, dynamic>.from(response.data);
 
       data['arabicName'] =

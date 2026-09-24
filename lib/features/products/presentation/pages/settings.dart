@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/cubit/theme/theme_cubic.dart';
+import '../../../../core/di/injection_container.dart';
 
 class settings extends StatefulWidget {
   settings({super.key});
@@ -14,6 +15,14 @@ class settings extends StatefulWidget {
 
 class _settingsState extends State<settings> {
   bool _notificationsEnabled = true;
+
+  Future<void> _logout() async {
+    await InjectionContainer.clearIsOpen();
+
+    if (!mounted) return;
+
+    context.go('/login');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,22 +46,39 @@ class _settingsState extends State<settings> {
               children: [
                 Text(
                   "Profile Settings",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 24,
+                  ),
                 ),
               ],
             ), // Profile Settings
-            Row(
-              children: [Text("Edit Profile", style: TextStyle(fontSize: 16))],
-            ), // Edit Profile
+
             Row(
               children: [
-                Text("Change Password", style: TextStyle(fontSize: 16)),
+                Text(
+                  "Edit Profile",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ), // Edit Profile
+
+            Row(
+              children: [
+                Text(
+                  "Change Password",
+                  style: TextStyle(fontSize: 16),
+                ),
               ],
             ), // Change Password
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Send Notifications", style: TextStyle(fontSize: 16)),
+                Text(
+                  "Send Notifications",
+                  style: TextStyle(fontSize: 16),
+                ),
                 Switch(
                   value: _notificationsEnabled,
                   onChanged: (bool value) {
@@ -63,10 +89,14 @@ class _settingsState extends State<settings> {
                 ),
               ],
             ), // Send Notifications
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Background", style: TextStyle(fontSize: 16)),
+                Text(
+                  "Background",
+                  style: TextStyle(fontSize: 16),
+                ),
                 BlocBuilder<ThemeCubic, ThemeState>(
                   builder: (context, state) {
                     return Switch(
@@ -78,18 +108,17 @@ class _settingsState extends State<settings> {
                   },
                 ),
               ],
-            ),
-            // Dark/Light Mode
+            ), // Dark/Light Mode
+
             const Spacer(),
+
             Padding(
-            padding:const EdgeInsets.all(20),
-              child:SizedBox(
+              padding: const EdgeInsets.all(20),
+              child: SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () {
-                      context.go('/login');
-                    },
+                  onPressed: _logout,
                   child: const Text('Log out'),
                 ),
               ),
